@@ -22,7 +22,9 @@ if status --is-interactive
 		set fish_function_path $fish_function_path ~/dev/others/base16/templates/fish-shell/functions
 		builtin source ~/dev/others/base16/templates/fish-shell/conf.d/base16.fish
 	end
-	tmux ^ /dev/null; and exec true
+	if ! set -q TMUX
+		exec tmux
+	end
 end
 
 if command -v aurman > /dev/null
@@ -83,7 +85,7 @@ function asend
 		return
 	end
 
-	adb shell input text (echo $argv[1] | sed -e 's/ /%s/g' -e 's/\([[()<>{}$|;&*\\~"\'`]\)/\\\\\1/g')
+	adb shell input text (echo $argv[1] | sed -e 's/ /%s/g' -e 's/\([#[()<>{}$|;&*\\~"\'`]\)/\\\\\1/g')
 end
 
 function qrsend
